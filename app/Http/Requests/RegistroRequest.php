@@ -24,7 +24,7 @@ class RegistroRequest extends FormRequest
     public function rules()
     {
         return [
-            'dni' => 'required|unique:usuarios',
+            'dni' => 'required',
         ];
     }
 
@@ -32,7 +32,7 @@ class RegistroRequest extends FormRequest
     {
         return [
             'dni.required' => "El DNI es requerido",
-            'dni.unique' => "Ya no puede ingresar",
+
         ];
     }
 }

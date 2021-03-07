@@ -19,6 +19,18 @@ class UsuarioController extends Controller
     {
         $dni = $request->input("dni");
         $cui = $request->input("cui");
+        $datoUsuario = Usuario::where('dni', $dni)->first(['dni','id','nombre']);
+        // dd($datoUsuario);
+        if($datoUsuario !== null){
+            return response()->json([
+                "status" => 200,
+                "metodo" => "login",
+                "name" => $datoUsuario->nombre,
+                "usuario_id" => $datoUsuario['id'],
+                "message" => "Puede iniciar"
+            ], 200);
+
+        }
         $urlEnpoint = "https://dni.optimizeperu.com/api/persons/{$dni}";
         $data = Http::get($urlEnpoint);
         if ($cui === $data['cui']) {
@@ -29,10 +41,12 @@ class UsuarioController extends Controller
             $usuario->segundo_apellido = $data['last_name'];
             $usuario->cui = $data['cui'];
             $usuario->fecha_reg = date("Y-m-d");
-            $resultado= $usuario->save();
+             $usuario->save();
             return response()->json([
                 "status" => 200,
                 "name" =>$data['name'],
+                "metodo" => "registro",
+                "usuario_id" => $usuario->id,
                 "message" => "Puede iniciar"
             ],200);
         } else {
