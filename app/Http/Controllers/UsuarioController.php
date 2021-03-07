@@ -58,10 +58,9 @@ class UsuarioController extends Controller
     {
         $user = Usuario::find($request->input("usuario_id"));
         $name = $user-> nombre . date("Y") . date("m") . date("d");
-
+        $namePdf= '/storage/'.$name .'.pdf';
         $nameqr = $name . '.svg';
-        QrCode::generate(env('APP_URL'), public_path() . '/qrcodes/' . $nameqr);
-
+        QrCode::generate(env('APP_URL'). $namePdf, public_path() . '/qrcodes/' . $nameqr);
         $user->pdf =  $name;
         $user->cod_qr =  $nameqr;
         $user->save();
