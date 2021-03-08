@@ -27,7 +27,7 @@ class UsuarioController extends Controller
                 "metodo" => "login",
                 "name" => $datoUsuario->nombre,
                 "usuario_id" => $datoUsuario['id'],
-                "message" => "Puede iniciar"
+                "message" => "Puede iniciar",
             ], 200);
 
         }
@@ -81,13 +81,28 @@ class UsuarioController extends Controller
         $user->cod_qr =  $nameqr;
         $user->save();
 
-        $preguntas=$user->userRespDescarte;
-        foreach($preguntas as $pregunta){
-            $pregunta->pregunta;
+        $resDescarte = $user->userRespDescarte;
+        $resPreVacuna = $user->userRespPre;
+        $soloResDescarte = array();
+        $soloResPreVacuna = array();
+
+        foreach($resDescarte as $respuesta){
+            $respuesta->pregunta;
+            array_push($soloResDescarte, $respuesta->respuesta);
         }
 
+        foreach ($resPreVacuna as $respuesta) {
+            $respuesta->pregunta;
+            array_push($soloResPreVacuna, $respuesta->respuesta);
+        }
 
-        $pdf = PDF::loadView('pdf.pdf', compact('preguntas'));
+        $resultado = array([
+            'descarte' => in_array('SI', $soloResDescarte),
+            'pre_vacunacion' => in_array('SI', $soloResPreVacuna),
+            'final' => in_array('SI', array_merge($soloResDescarte, $soloResPreVacuna))
+        ]);
+
+        $pdf = PDF::loadView('pdf.pdf', compact('resDescarte', 'resPreVacuna', 'resultado'));
 
         $pdf2 = PDF::loadView('pdf.informe', compact('user'));
         $pdf->save(public_path() . '/storage/' . $name . '.pdf');
@@ -95,12 +110,11 @@ class UsuarioController extends Controller
         $informe = $pdf->output();
         $informe2 = $pdf2->output();
 
-
         Mail::to($request->input("correo"))->send(new ImmMailable($informe, $informe2,$name, $name2, $nombre));
 
         return response()->json([
             "status" => 200,
-            "message" => "Revise su correo",
+            "message" => 'Revise su correo'
         ], 200);
     }
 
@@ -122,7 +136,5 @@ class UsuarioController extends Controller
             "preVacuna" => in_array("SI", $respuestaPrevacunacion)
         ], 200);
     }
-    public function qr(){
-        QrCode::generate('Make me into a QrCode!', '../public/qrcodes/qrcode.svg');
-    }
+
 }

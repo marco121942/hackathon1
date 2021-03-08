@@ -9,7 +9,7 @@ class PreVacunacionPregunta extends Model
     //
     protected $fillable = ['pregunta'];
 
-    public function preguntaPreVacuna()
+    public function respuestas()
     {
         return $this->hasMany(PreVacunacionRespuesta::class);
     }
