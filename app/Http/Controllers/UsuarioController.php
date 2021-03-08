@@ -71,7 +71,9 @@ class UsuarioController extends Controller
     public function EnviarCorreo(Request $request)
     {
         $user = Usuario::find($request->input("usuario_id"));
-        $name = $user-> nombre . date("Y") . date("m") . date("d");
+        $nombre= $user-> nombre;
+        $name = $user-> nombre . date("Y") . date("m") . date("d").'-Informe';
+        $name2 = $user->nombre . date("Y") . date("m") . date("d") .'-Declaración';
         $namePdf= '/storage/'.$name .'.pdf';
         $nameqr = $name . '.svg';
         QrCode::generate(env('APP_URL'). $namePdf, public_path() . '/qrcodes/' . $nameqr);
@@ -79,12 +81,22 @@ class UsuarioController extends Controller
         $user->cod_qr =  $nameqr;
         $user->save();
 
-        $pdf = PDF::loadView('pdf.pdf', compact('data'));
+        $preguntas=$user->userRespDescarte;
+        foreach($preguntas as $pregunta){
+            $pregunta->pregunta;
+        }
+
+
+        $pdf = PDF::loadView('pdf.pdf', compact('preguntas'));
+
+        $pdf2 = PDF::loadView('pdf.informe', compact('user'));
         $pdf->save(public_path() . '/storage/' . $name . '.pdf');
+        $pdf2->save(public_path() . '/storage/' . $name2 . '.pdf');
         $informe = $pdf->output();
+        $informe2 = $pdf2->output();
 
 
-        Mail::to($request->input("correo"))->send(new ImmMailable($informe,$name));
+        Mail::to($request->input("correo"))->send(new ImmMailable($informe, $informe2,$name, $name2, $nombre));
 
         return response()->json([
             "status" => 200,

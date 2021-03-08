@@ -117,7 +117,7 @@ button {
               <!-- HTML Spacer row -->
               <td style="font-size: 0; line-height: 0;" height="20"><table width="96%" align="left"  cellpadding="0" cellspacing="0">
                   <tr>
-                    <td style="font-size: 0; line-height: 0;" height="20"><img src="logo1.png" width="113" height="28" alt="" style="display: block; margin: 0; padding: 0; border: 0; margin-left: 20px; margin-top: 20px;" /></td>
+
                   </tr>
                   <tr>
                     <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
@@ -129,7 +129,7 @@ button {
               <td><table width="96%"  align="left" cellpadding="0" cellspacing="0">
                   <tr>
                     <!-- row container for TITLE/EMAIL THEME -->
-                    <td align="center" style="font-size: 32px; font-weight: 300; line-height: 2.5em; color: #000; font-family: sans-serif;">Hola María</td>
+                    <td align="center" style="font-size: 32px; font-weight: 300; line-height: 2.5em; color: #000; font-family: sans-serif;">Hola {{$nombre}}</td>
                   </tr>
                   <tr>
                     <!-- row container for Tagline -->

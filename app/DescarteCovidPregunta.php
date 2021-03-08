@@ -9,7 +9,7 @@ class DescarteCovidPregunta extends Model
     //
     protected $fillable = ['pregunta'];
 
-    public function preguntaDescarte()
+    public function respuestas()
     {
         return $this->hasMany(DescarteCovidRespuesta::class);
     }

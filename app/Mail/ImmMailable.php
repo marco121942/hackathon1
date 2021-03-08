@@ -14,16 +14,21 @@ class ImmMailable extends Mailable
     public $subject = "Resultados";
     public $pdf;
 
+    public $nombre;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($pdf,$name)
+    public function __construct($pdf,$pdf2,$name, $name2,$nombre)
     {
         //
         $this->pdf = $pdf;
         $this->name = $name;
+        $this->name2 = $name2;
+        $this->pdf2 = $pdf2;
+        $this->nombre = $nombre;
     }
 
     /**
@@ -33,6 +38,6 @@ class ImmMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.reclamo')->attachData($this->pdf, $this->name.'.pdf');
+        return $this->view('emails.reclamo')->attachData($this->pdf, $this->name.'.pdf')->attachData($this->pdf2, $this->name2.'.pdf');
     }
 }
